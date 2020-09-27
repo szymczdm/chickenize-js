@@ -19,9 +19,7 @@ Technically speaking, it works for a lot more than just chickens, but that's irr
 
 1. Add the chickenize.js script to your website.
 2. Create something you want to click on with an `id="egg"` and add it to your site (or alternately, remove the onload part of the script and call `releaseTheChickens()` from anywhere in your site).
-3. Add chicken images (if you want to replace images, otherwise make sure to change the config!)
-4. Update the config at the top of chickenize.js to include your chicken images!
-5. Load up your site and click on your trigger (or `releaseTheChickens()`)!
+3. Load up your site and click on your trigger (or call `releaseTheChickens()`)!
 
 ## Configuration
 
@@ -41,10 +39,10 @@ Editing the config is easy, just follow the guide below.
  - `imgFilenames` - The source file names within the sourceDir (or elsewhere if imgSourceDir is set to '') to be used for replacing images. Defaults to `['chicken1.png', 'chicken2.png']`
 }
 
-**Note:** I do not have any public domain / shareable chicken images at this time, so you will need to ensure you provide your own if using `replaceImages` and `replaceIFrames`.
+**Note:** Chickenize comes with two public-domain chicken images at this time, but you can also provide your own when using `replaceImages` and `replaceIFrames` by changing the imgFilenames config.
 
 # Have fun!
 
-This was a weekend project I made to help teach some friends some JS concepts. Hopefully you can have fun with it too!
+This was a short project I made on a weekend to help teach some friends some JS concepts. Hopefully you can have fun with it too!
 
-Contributions are welcome!
+Contributions are welcome! Feel free to file issues or open pull requests if you want to contribute.
