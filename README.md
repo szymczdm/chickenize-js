@@ -17,11 +17,11 @@ Technically speaking, it works for a lot more than just chickens, but that's irr
 
 ## Quickstart
 
-Add the chickenize.js script to your website.
-Create something you want to click on with an `id="egg"` and add it to your site (or alternately, remove the onload part of the script and call `releaseTheChickens()` from anywhere in your site).
-Add chicken images (if you want to replace images, otherwise make sure to change the config!)
-Update the config at the top of chickenize.js to include your chicken images!
-Load up your site and click on your trigger (or `releaseTheChickens()`)!
+1. Add the chickenize.js script to your website.
+2. Create something you want to click on with an `id="egg"` and add it to your site (or alternately, remove the onload part of the script and call `releaseTheChickens()` from anywhere in your site).
+3. Add chicken images (if you want to replace images, otherwise make sure to change the config!)
+4. Update the config at the top of chickenize.js to include your chicken images!
+5. Load up your site and click on your trigger (or `releaseTheChickens()`)!
 
 ## Configuration
 
