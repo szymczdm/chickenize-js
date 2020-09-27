@@ -95,5 +95,5 @@ function releaseTheChickens (target = CONFIG.target, delay = CONFIG.delay, delay
     console.log('Chickens incoming');
 }
 
-window.onload = () => document.getElementById('egg').addEventListener('click', () => 
+document.getElementById('egg').addEventListener('click', () => 
     releaseTheChickens());
