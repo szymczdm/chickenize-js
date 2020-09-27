@@ -1,11 +1,13 @@
 const CONFIG = {
-    imgSourceDir: './chickens/',
-    imageFilenames: ['chicken1.png', 'chicken2.png'],
+    target: document.body,
+    delay: 500,
+    delayModifier: 5,
+    randomizeNodes: true,
     replacementText: ['Chicken', 'Bok'],
-    target: document.body, 
-    delay: 1000,
-    delayModifier: 10,
-    randomizeNodes: true
+    replaceImages: true,
+    replaceIFrames: true,
+    imgSourceDir: './chickens/',
+    imgFilenames: ['chicken1.png', 'chicken2.png']
 }
 
 const chickenRegEx = new RegExp(/[^\s]+/g);
@@ -27,20 +29,24 @@ function chickenize(node) {
     if (node.nodeType === Node.TEXT_NODE) {
         node.nodeValue = injectChickens(node.nodeValue);
     }
-    else if (node instanceof HTMLImageElement || node instanceof HTMLIFrameElement) {
-        let imageFilenameToUse = CONFIG.imageFilenames[getRandomIndex(CONFIG.imageFilenames.length)];
-        node.src = CONFIG.imgSourceDir + imageFilenameToUse;
-    }
-    else if (window.getComputedStyle(node).getPropertyValue('background-image') !== 'none') {
-        let imageFilenameToUse = CONFIG.imageFilenames[getRandomIndex(CONFIG.imageFilenames.length)];
-        node.style.backgroundImage = `url("${CONFIG.imgSourceDir + imageFilenameToUse}")`;
+    else {
+        if ( CONFIG.replaceImages && node instanceof HTMLImageElement || CONFIG.replaceIFrames && node instanceof HTMLIFrameElement) {
+            let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
+            node.src = CONFIG.imgSourceDir + imgFilenameToUse;
+        }
+        else if (window.getComputedStyle(node).getPropertyValue('background-image') !== 'none') {
+            let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
+            node.style.backgroundImage = `url("${CONFIG.imgSourceDir + imgFilenameToUse}")`;
+        }
     }
 }
 
 function getChickenizeableNodes(target){
     let result = [];
-    if (target.nodeType !== Node.COMMENT_NODE && target.nodeName !== 'script' && (target.nodeType === Node.TEXT_NODE || target instanceof HTMLImageElement || 
-            target instanceof HTMLIFrameElement || window.getComputedStyle(target).getPropertyValue('background-image') !== 'none')) {
+    if (target.nodeType !== Node.COMMENT_NODE && target.nodeName !== 'script' && 
+        (target.nodeType === Node.TEXT_NODE || (CONFIG.replaceIFrames && target instanceof HTMLIFrameElement) || 
+        (CONFIG.replaceImages && (target instanceof HTMLImageElement || 
+            window.getComputedStyle(target).getPropertyValue('background-image') !== 'none')))) {
         result.push(target);
     }
     let childResult = [];
@@ -76,7 +82,7 @@ function delayedChickenization(soonToBeChickens, delay, delayModifier, randomize
     }, newDelay);
 }
 
-function releaseTheChickens (target, delay, delayModifier, randomize) {
+function releaseTheChickens (target = CONFIG.target, delay = CONFIG.delay, delayModifier = CONFIG.delayModifier, randomize = CONFIG.randomizeNodes) {
     let soonToBeChickens = getChickenizeableNodes(target);
     if (soonToBeChickens.length > 0) {
         if (delay > 0) {
@@ -90,4 +96,4 @@ function releaseTheChickens (target, delay, delayModifier, randomize) {
 }
 
 window.onload = () => document.getElementById('egg').addEventListener('click', () => 
-    releaseTheChickens(CONFIG.target, CONFIG.delay, CONFIG.delayModifier, CONFIG.randomizeNodes));
+    releaseTheChickens());
