@@ -1,19 +1,25 @@
-const imgSourceDir = './chickens/';
-const imageFilenames = ['chicken1.png', 'chicken2.png'];
+const CONFIG = {
+    imgSourceDir: './chickens/',
+    imageFilenames: ['chicken1.png', 'chicken2.png'],
+    replacementText: ['Chicken', 'Bok'],
+    target: document.body, 
+    delay: 1000,
+    delayModifier: 10,
+    randomizeNodes: true
+}
 
 const chickenRegEx = new RegExp(/[^\s]+/g);
-const replacementText = ['Chicken', 'Bok']
 
 function getRandomIndex(arrayLength) {
     return Math.floor(Math.random() * arrayLength);
 }
 
 function injectChickens(nodeValue) {
-    if (typeof replacementText === 'string') {
-        return nodeValue.replace(chickenRegEx, replacementText);
+    if (typeof CONFIG.replacementText === 'string') {
+        return nodeValue.replace(chickenRegEx, CONFIG.replacementText);
     }
     else {
-        return nodeValue.replace(chickenRegEx, replacementText[getRandomIndex(replacementText.length)]);
+        return nodeValue.replace(chickenRegEx, CONFIG.replacementText[getRandomIndex(CONFIG.replacementText.length)]);
     }
 }
 
@@ -22,12 +28,12 @@ function chickenize(node) {
         node.nodeValue = injectChickens(node.nodeValue);
     }
     else if (node instanceof HTMLImageElement || node instanceof HTMLIFrameElement) {
-        let imageFilenameToUse = imageFilenames[getRandomIndex(imageFilenames.length)];
-        node.src = imgSourceDir + imageFilenameToUse;
+        let imageFilenameToUse = CONFIG.imageFilenames[getRandomIndex(CONFIG.imageFilenames.length)];
+        node.src = CONFIG.imgSourceDir + imageFilenameToUse;
     }
     else if (window.getComputedStyle(node).getPropertyValue('background-image') !== 'none') {
-        let imageFilenameToUse = imageFilenames[getRandomIndex(imageFilenames.length)];
-        node.style.backgroundImage = `url("${imgSourceDir + imageFilenameToUse}")`;
+        let imageFilenameToUse = CONFIG.imageFilenames[getRandomIndex(CONFIG.imageFilenames.length)];
+        node.style.backgroundImage = `url("${CONFIG.imgSourceDir + imageFilenameToUse}")`;
     }
 }
 
@@ -70,7 +76,7 @@ function delayedChickenization(soonToBeChickens, delay, delayModifier, randomize
     }, newDelay);
 }
 
-function releaseTheChickens (target = document.body, delay = 1000, delayModifier = 10, randomize = true) {
+function releaseTheChickens (target, delay, delayModifier, randomize) {
     let soonToBeChickens = getChickenizeableNodes(target);
     if (soonToBeChickens.length > 0) {
         if (delay > 0) {
@@ -83,4 +89,5 @@ function releaseTheChickens (target = document.body, delay = 1000, delayModifier
     console.log('Chickens incoming');
 }
 
-window.onload = () => document.getElementById('egg').addEventListener('click', () => releaseTheChickens(document.body, 0, 10, false));
+window.onload = () => document.getElementById('egg').addEventListener('click', () => 
+    releaseTheChickens(CONFIG.target, CONFIG.delay, CONFIG.delayModifier, CONFIG.randomizeNodes));
