@@ -46,4 +46,5 @@ Editing the config is easy, just follow the guide below.
 # Have fun!
 
 This was a weekend project I made to help teach some friends some JS concepts. Hopefully you can have fun with it too!
+
 Contributions are welcome!
