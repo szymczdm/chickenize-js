@@ -30,13 +30,19 @@ function chickenize(node) {
         node.nodeValue = injectChickens(node.nodeValue);
     }
     else {
-        if ( CONFIG.replaceImages && node instanceof HTMLImageElement || CONFIG.replaceIFrames && node instanceof HTMLIFrameElement) {
-            let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
-            node.src = CONFIG.imgSourceDir + imgFilenameToUse;
-        }
-        else if (window.getComputedStyle(node).getPropertyValue('background-image') !== 'none') {
-            let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
-            node.style.backgroundImage = `url("${CONFIG.imgSourceDir + imgFilenameToUse}")`;
+        if ( CONFIG.replaceImages ) {
+            if (node instanceof HTMLImageElement || CONFIG.replaceIFrames && node instanceof HTMLIFrameElement) {
+                let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
+                node.src = CONFIG.imgSourceDir + imgFilenameToUse;
+            } else if (window.getComputedStyle(node).getPropertyValue('background-image') !== 'none') {
+                let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
+                node.style.backgroundImage = `url("${CONFIG.imgSourceDir + imgFilenameToUse}")`;
+            } else if (node instanceof HTMLSourceElement) {
+                let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
+                if (node.srcset) {
+                    node.srcset = CONFIG.imgSourceDir + imgFilenameToUse;
+                }
+            }
         }
     }
 }
@@ -46,7 +52,8 @@ function getChickenizeableNodes(target){
     if (target.nodeType !== Node.COMMENT_NODE && target.nodeName !== 'script' && 
         (target.nodeType === Node.TEXT_NODE || (CONFIG.replaceIFrames && target instanceof HTMLIFrameElement) || 
         (CONFIG.replaceImages && (target instanceof HTMLImageElement || 
-            window.getComputedStyle(target).getPropertyValue('background-image') !== 'none')))) {
+            window.getComputedStyle(target).getPropertyValue('background-image') !== 'none' ||
+            target instanceof HTMLSourceElement)))) {
         result.push(target);
     }
     let childResult = [];
