@@ -21,7 +21,7 @@ function injectChickens(nodeValue) {
         return nodeValue.replace(chickenRegEx, CONFIG.replacementText);
     }
     else {
-        return nodeValue.replace(chickenRegEx, CONFIG.replacementText[getRandomIndex(CONFIG.replacementText.length)]);
+        return nodeValue.split(/(\s+)/).map(str => str.replace(chickenRegEx, CONFIG.replacementText[getRandomIndex(CONFIG.replacementText.length)])).join('');
     }
 }
 
