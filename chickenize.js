@@ -31,17 +31,14 @@ function chickenize(node) {
     }
     else {
         if ( CONFIG.replaceImages ) {
+            let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
+
             if (node instanceof HTMLImageElement || CONFIG.replaceIFrames && node instanceof HTMLIFrameElement) {
-                let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
                 node.src = CONFIG.imgSourceDir + imgFilenameToUse;
             } else if (window.getComputedStyle(node).getPropertyValue('background-image') !== 'none') {
-                let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
                 node.style.backgroundImage = `url("${CONFIG.imgSourceDir + imgFilenameToUse}")`;
-            } else if (node instanceof HTMLSourceElement) {
-                let imgFilenameToUse = CONFIG.imgFilenames[getRandomIndex(CONFIG.imgFilenames.length)];
-                if (node.srcset) {
-                    node.srcset = CONFIG.imgSourceDir + imgFilenameToUse;
-                }
+            } else if (node instanceof HTMLSourceElement && node.srcset) {
+                node.srcset = CONFIG.imgSourceDir + imgFilenameToUse;
             }
         }
     }
