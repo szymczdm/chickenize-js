@@ -3,9 +3,6 @@ jobs:
   build:
     docker:
     - image: cimg/node:18.4
-      auth:
-        username: mydockerhub-user
-        password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - run: echo "hello world"
