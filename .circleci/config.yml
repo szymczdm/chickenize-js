@@ -6,3 +6,16 @@ jobs:
     steps:
       - checkout
       - run: echo "hello world"
+  test:
+    docker:
+      - image: cimg/node:18.4
+    steps:
+      - run: echo "testing"
+workflows:
+  version: 2.1
+  build_test:
+    jobs:
+      - build
+      - test:
+        - type: approval
+        - requires: build
