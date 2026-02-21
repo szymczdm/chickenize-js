@@ -4,6 +4,7 @@ const CONFIG = {
     delayModifier: 5,
     randomizeNodes: true,
     replacementText: ['Chicken', 'Bok'],
+    replacementEmoji: ['🐔', '🐓', '🐣', '🐤'],
     replaceImages: true,
     replaceIFrames: true,
     imgSourceDir: './chickens/',
@@ -16,13 +17,22 @@ function getRandomIndex(arrayLength) {
     return Math.floor(Math.random() * arrayLength);
 }
 
+function replaceEmojiAndText(str) {
+  if (CONFIG.replacementEmoji.length > 0) {
+    if (str.match(/^(?:\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u)) {
+      return str.replace(str,CONFIG.replacementEmoji[getRandomIndex(CONFIG.replacementEmoji.length)]);
+    }
+  }
+  if (typeof CONFIG.replacementText === 'string') {
+    return str.replace(chickenRegEx, CONFIG.replacementText);
+  }
+  return str.replace(chickenRegEx, CONFIG.replacementText[getRandomIndex(CONFIG.replacementText.length)])
+}
+
 function injectChickens(nodeValue) {
-    if (typeof CONFIG.replacementText === 'string') {
-        return nodeValue.replace(chickenRegEx, CONFIG.replacementText);
-    }
-    else {
-        return nodeValue.split(/(\s+)/).map(str => str.replace(chickenRegEx, CONFIG.replacementText[getRandomIndex(CONFIG.replacementText.length)])).join('');
-    }
+  return nodeValue.split(/(\s+)/).map(str => {
+    return replaceEmojiAndText(str);
+  }).join('');
 }
 
 function chickenize(node) {
@@ -46,7 +56,7 @@ function chickenize(node) {
 
 function getChickenizeableNodes(target){
     let result = [];
-    if (target.nodeType !== Node.COMMENT_NODE && target.nodeName !== 'script' && 
+    if (target.nodeType !== Node.COMMENT_NODE && target.nodeName !== 'script' &&
         (target.nodeType === Node.TEXT_NODE || (CONFIG.replaceIFrames && target instanceof HTMLIFrameElement) || 
         (CONFIG.replaceImages && (target instanceof HTMLImageElement || 
             window.getComputedStyle(target).getPropertyValue('background-image') !== 'none' ||
